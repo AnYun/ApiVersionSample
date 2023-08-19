@@ -12,6 +12,7 @@ namespace ApiVersionSample.Controllers
     public class SampleV2Controller : ControllerBase
     {
         [HttpGet]
+        [MapToApiVersion(2.0)]
         public IActionResult Get()
         {
             var apiVersion = HttpContext.GetRequestedApiVersion();

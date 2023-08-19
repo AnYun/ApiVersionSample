@@ -1,4 +1,6 @@
 using Asp.Versioning;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ApiVersionSample
 {
@@ -21,9 +23,26 @@ namespace ApiVersionSample
                     new HeaderApiVersionReader("x-ms-version"),
                     new QueryStringApiVersionReader("v"));
 
-            }).AddMvc();
+            }).AddMvc().AddApiExplorer();
+
+            builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            builder.Services.AddSwaggerGen(options => options.OperationFilter<SwaggerDefaultValues>());
 
             var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(
+                    options => {
+                        foreach (var description in app.DescribeApiVersions())
+                        {
+                            options.SwaggerEndpoint(
+                                $"/swagger/{description.GroupName}/swagger.json",
+                                description.GroupName);
+                        }
+                    });
+            }
 
             // Configure the HTTP request pipeline.
 
