@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <PackageReference Include="Asp.Versioning.Mvc" Version="7.0.1" />
   </ItemGroup>
 
 </Project>
